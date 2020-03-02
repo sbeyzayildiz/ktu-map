@@ -1,5 +1,12 @@
 {
-  "dependencies": {
-    "@angular/cli": "^9.0.4"
-  }
+  "workspaces": [
+    "components",
+    "map-main"
+  ],
+  "name": "frontend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "S Beyza Yildiz",
+  "license": "UNLICENSED",
+  "private": true
 }
