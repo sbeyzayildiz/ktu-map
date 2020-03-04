@@ -1,0 +1,19 @@
+.search-bar {
+    background-image: url('../src/assets/search-icon.svg');
+    background-repeat: no-repeat;
+    background-position-x: right;
+    background-position-y: center;
+    border-radius: 10px;
+    padding: 4px 19px 4px 4px;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    font-family: Helvetica, Arial, sans-serif;
+    color: #453f3f;
+    font-weight: 600;
+    background-color: #ffffffb3;
+    outline: none;       
+    text-decoration: none;
+    width: 150px;
+    border: 2px solid #7db4e9;
+}
