@@ -7,6 +7,7 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import {defaults as defaultControls} from 'ol/control';
 import { fromLonLat } from 'ol/proj';
+import MapBrowserEvent from 'ol/MapBrowserEvent';
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -14,13 +15,16 @@ import { fromLonLat } from 'ol/proj';
 })
 export class MapComponent implements OnInit {
   @ViewChild('olMap', {static: true}) olMapEl: ElementRef<HTMLDivElement>;
-  constructor() { }
+  @ViewChild('olCoordinate', {static: true}) olCoordinatEl: ElementRef<HTMLDivElement>;
+  constructor() {
+  }
 
   view: View;
   map: Map;
 
   ngOnInit(): void {
     this.createMap(this.olMapEl.nativeElement);
+    // this.olCoordinatEl.nativeElement.innerHTML = '39.7710, 40.9952';
   }
 
   createMap(mapElement) {
@@ -33,18 +37,20 @@ export class MapComponent implements OnInit {
         center: fromLonLat([39.7710, 40.9952]),
         zoom: 17
       }),
-      controls: defaultControls([]).extend([
-        new MousePosition({
-          coordinateFormat: createStringXY(4),
-          projection: 'EPSG:4326',
-          // comment the following two lines to have the mouse position
-          // be placed within the map.
-          className: 'custom-mouse-position',
-          target: document.getElementById(mapElement),
-          undefinedHTML: '&nbsp;'
-        })
-      ])
+      // controls: defaultControls({zoom: false, attribution: false}).extend([
+      //   new MousePosition({
+      //     coordinateFormat: createStringXY(4),
+      //     projection: 'EPSG:4326',
+      //     // comment the following two lines to have the mouse position
+      //     // be placed within the map.
+      //     className: 'custom-mouse-position',
+      //     target: this.olCoordinatEl.nativeElement,
+      //     undefinedHTML: '&nbsp;'
+      //   })
+      // ])
+      controls: defaultControls({zoom: false, attribution: false})
     });
+
   }
 
 }
