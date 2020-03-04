@@ -1,7 +1,7 @@
 {
   "workspaces": [
-    "components",
-    "map-main"
+    "@ktumap/components",
+    "@ktumap/map-main"
   ],
   "name": "frontend",
   "version": "1.0.0",
