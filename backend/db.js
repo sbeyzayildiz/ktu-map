@@ -1,14 +1,24 @@
 const { Sequelize, Model, DataTypes } = require('sequelize');
 //const sequelize = new Sequelize('sqlite::memory:');
-const sequelize = new Sequelize('postgres://postgres:patates_agaci@feyz.cf:9876/postgres') // Example for postgres
+const POSTGRES_HOST = process.env.POSTGRES_HOST
+const POSTGRES_PORT = process.env.POSTGRES_PORT
+const POSTGRES_USER = process.env.POSTGRES_USER
+const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD
+const POSTGRES_DB = process.env.POSTGRES_DB
+
+const sequelize = new Sequelize(`postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}`) // Example for postgres
+
 
 class Unit extends Model { }
 Unit.init({
-    name: DataTypes.STRING,
+    name: { type: DataTypes.STRING, allowNull: false },
     description: DataTypes.STRING,
     telephone: DataTypes.STRING,
     website: DataTypes.STRING,
-    category_id: DataTypes.INTEGER,
+    category_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
     parent_unit_id: DataTypes.INTEGER,
     geom: DataTypes.GEOMETRY
 }, { sequelize });
@@ -23,14 +33,19 @@ Photo.init({
 Photo.belongsTo(Unit, {
     foreignKey: 'unit_id'
 })
-
 class Category extends Model { }
 Category.init({
-    name: DataTypes.STRING,
+    name: {
+        allowNull: false,
+        type: DataTypes.STRING
+    },
 
 }, { sequelize });
 
-Category.belongsTo(Unit, {
+// Category.belongsTo(Unit, {
+//     foreignKey: 'category_id'
+// })
+Unit.belongsTo(Category, {
     foreignKey: 'category_id'
 })
 
@@ -43,12 +58,7 @@ Admin.init({
 }, { sequelize })
 
 
-sequelize.sync({force: true})
-    .then(
-        () => {
-            console.log('sync calistiii!!!')
-        }
-    )
+
 module.exports = {
     Unit,
     Admin,

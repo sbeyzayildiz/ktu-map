@@ -4,3 +4,4 @@ package-lock.json
 .idea
 /Backend/logs/*.txt
 logs/*
+.env
