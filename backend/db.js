@@ -20,13 +20,19 @@ Unit.init({
         allowNull: false
     },
     parent_unit_id: DataTypes.INTEGER,
-    geom: DataTypes.GEOMETRY
+    geom: {
+        type: DataTypes.GEOMETRY('POLYGON', 4326),
+        allowNull: false
+    }
 }, { sequelize });
 
 class Photo extends Model { }
 Photo.init({
     data: DataTypes.STRING,
-    unit_id: DataTypes.INTEGER,
+    unit_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
 
 }, { sequelize });
 
@@ -37,32 +43,71 @@ class Category extends Model { }
 Category.init({
     name: {
         allowNull: false,
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        unique: true,
     },
 
 }, { sequelize });
 
-// Category.belongsTo(Unit, {
-//     foreignKey: 'category_id'
-// })
 Unit.belongsTo(Category, {
     foreignKey: 'category_id'
 })
 
 class Admin extends Model { }
 Admin.init({
-    username: { allowNull: false, unique: true, type: DataTypes.STRING },
+    username: {
+        allowNull: false,
+        unique: true,
+        type: DataTypes.STRING
+    },
     display_name: DataTypes.STRING,
-    password: DataTypes.STRING,
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     email: DataTypes.STRING
 }, { sequelize })
 
+const initSuperadmin = async () => {
+    const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+    const user = await Admin.findOne({ where: { username: ADMIN_USERNAME } })
+    if (!user) {
+        return Admin.create({
+            username: ADMIN_USERNAME,
+            password: ADMIN_PASSWORD
+        })
+    }
 
+}
+
+const initCategories = async () => {
+    const defaultCategories = [
+        { name: 'Kampüs' },
+        { name: 'Fakülte' },
+        { name: 'Dekanlık' },
+        { name: 'Bölüm' },
+        { name: 'Kütüphane' },
+        { name: 'Park' },
+        { name: 'Kongre Merkezi' },
+        { name: 'Kantin' },
+    ]
+    const alreadyExistCategries = await Category.findAll()
+    const notFoundCategories = defaultCategories.filter(def => {
+        const dbHasThisOne = !!alreadyExistCategries.find(dbCat => dbCat.name === def.name);
+        return !dbHasThisOne
+    });
+    for (const cat of notFoundCategories) {
+        await Category.create(cat);
+    }
+}
 
 module.exports = {
     Unit,
     Admin,
     Photo,
     Category,
-    sequelize
+    sequelize,
+    initSuperadmin,
+    initCategories,
 }
