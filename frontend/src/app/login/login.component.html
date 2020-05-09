@@ -1,0 +1,17 @@
+<ng-template #modal>
+   <h2 mat-dialog-title>Oturum Açın</h2>
+   <mat-dialog-content>
+       <form [formGroup]="loginForm" class="form" (submit)="login()">
+           <mat-form-field>
+               <mat-label>Kullanıcı adı</mat-label>
+               <input type="text" matInput formControlName="username" required>
+           </mat-form-field>
+           <mat-form-field>
+               <mat-label>Şifre</mat-label>
+               <input type="password" matInput formControlName="password" required>
+           </mat-form-field>
+           <button mat-raised-button type="submit" [disabled]="!loginForm.valid">Giriş Yap</button>
+       </form>
+   </mat-dialog-content>
+</ng-template>
+

@@ -1,0 +1,45 @@
+<div class="main-container">
+    <div class="body">
+        <mat-sidenav color="primary" #drawer class="sidenav" [ngClass]="sidebarVisibility ? 'f-open': 'f-close'"
+            fixedInViewport="true" mode="side" [opened]="sidebarVisibility">
+        </mat-sidenav>
+        <mat-sidenav-container style="flex: 1;">
+            <mat-sidenav-content>
+                <button class="menu-button" mat-icon-button (click)="changeSidebarVisibility()">
+                    <mat-icon color="accent">menu</mat-icon>
+                </button>
+                <mat-form-field appearance="outline" class="filter-input">
+                    <mat-label style="display: flex; align-items: center;">
+                        <mat-icon style="font-size: 30px;">
+                            search
+                        </mat-icon>
+                        Birim Ara
+                    </mat-label>
+                    <input matInput placeholder="Örn. Bilgisayar Mühendisliği"
+                        [matAutocomplete]="auto"  [formControl]="stateCtrl">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let unit of filteredStates | async" [value]="unit.name" (click)="getViewUnit(unit)">{{unit.name}}</mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+                <a class="logo" [routerLink]="['/login']">
+                    logo
+                </a>
+                <div #map class="map">
+                </div>
+                <div class="basemap-options">
+                    maps
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="options">
+                    options
+                </div>
+                <div class="content-title">
+
+                </div>
+                <router-outlet></router-outlet>
+            </mat-sidenav-content>
+        </mat-sidenav-container>
+    </div>
+</div>

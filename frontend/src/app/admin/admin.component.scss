@@ -1,0 +1,13 @@
+.tool {
+    position: absolute;
+    z-index: 2;
+    bottom: 20px;
+    left: 30%;
+    right: 30%;
+    display: flex;
+    justify-content: space-between;
+    width: fit-content;
+    button {
+        margin-right: 8px;
+    }
+}

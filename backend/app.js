@@ -26,7 +26,13 @@ const envChecker = () => {
 }
 envChecker();
 
-
+app.use((req, res, next) => {
+    res.set({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'content-type, authorization'
+    })
+    next();
+})
 app.use(express.json());
 const isAdminMiddleware = async (req, res, next) => {
     try {

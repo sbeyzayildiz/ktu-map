@@ -1,0 +1,16 @@
+<mat-card class="tool">
+    <mat-card-content>
+        <button mat-raised-button color="accent" title="Birim Seç" (click)="selectUnit()">
+            <mat-icon>pan_tool</mat-icon>
+        </button>
+        <button mat-raised-button color="accent" title="Yeni Birim Çiz" (click)="drawUnit()">
+            <mat-icon>add</mat-icon>
+        </button>
+        <button mat-raised-button color="accent" title="Birim Düzenle" [disabled]="!unitSelected" (click)="editUnit()">
+            <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-raised-button color="accent" title="Birim Sil" [disabled]="!unitSelected" (click)="deleteUnit()">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </mat-card-content>
+</mat-card>
