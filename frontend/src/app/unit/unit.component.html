@@ -1,1 +1,35 @@
-<p>unit works!</p>
+<mat-card *ngIf="unit">
+    <mat-card-title>
+       <span>{{unit.name}}</span> 
+       <button mat-icon-button (click)="closeSidenav()">
+           <mat-icon>close</mat-icon>
+       </button>
+    </mat-card-title>
+    <mat-card-content>
+        <div class="content">
+            <div class="title">İletişim Bilgileri</div>
+            <div class="row">
+                <mat-icon>phone</mat-icon>
+                <span>{{unit.telephone}}</span>
+            </div>
+            <div class="row">
+                <mat-icon>home</mat-icon>
+                <span>{{unit.address}}</span>
+            </div>
+            <div class="row">
+                <mat-icon>web</mat-icon>
+                <span>{{unit.website}}</span>
+            </div>
+        </div>
+        <div class="content">
+            <div class="title">Açıklama</div>
+            <div class="row">
+                <span>{{unit.description}}</span>
+            </div>
+        </div>
+        <div class="content">
+            <div class="title">Fotoğraflar</div>
+            <div></div>
+        </div>
+    </mat-card-content>
+</mat-card>

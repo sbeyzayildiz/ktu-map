@@ -6,7 +6,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './services/AuthGuard/auth.guard';
 import { RouterModule, Routes } from '@angular/router';
-import { MatSidenavModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatDialogModule } from '@angular/material';
+import { MatSidenavModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatDialogModule, MatDividerModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,11 +18,13 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { UnitEditComponent } from './unit-edit/unit-edit.component';
 import { UnitDeleteComponent } from './unit-delete/unit-delete.component';
 import { TokenIntercepterService } from './services/TokenInterceptor/token-interceptor.service';
+import { UnitAddComponent } from './unit-add/unit-add.component';
 
 const routes: Routes = [
   {
     path: '', component: HomeComponent, children: [
       { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], children: [
+        { path: 'add', component: UnitEditComponent},
         { path: 'edit', component: UnitEditComponent},
         { path: 'delete', component: UnitDeleteComponent},
       ]},
@@ -40,7 +42,8 @@ const routes: Routes = [
     UnitComponent,
     AdminComponent,
     UnitEditComponent,
-    UnitDeleteComponent
+    UnitDeleteComponent,
+    UnitAddComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +59,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     FormsModule,
     MatDialogModule,
-    HttpClientModule
+    HttpClientModule,
+    MatDividerModule
   ],
   providers: [
     AuthGuard,

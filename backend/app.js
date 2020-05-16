@@ -48,12 +48,26 @@ const isAdminMiddleware = async (req, res, next) => {
     }
 
 }
-app.get('/api/unit', async function (req, res) {
-    const units = await db.Unit.findAll()
-    res.status(200).json(units)
-})
-app.get('/api/unit/:id', function (req, res) {
+app.get('/api/unit', async function (req, res, next) {
+    try {
+        const units = await db.Unit.findAll()
+        res.status(200).json(units)
 
+    } catch (error) {
+        next(error)
+    }
+})
+app.get('/api/unit/:id', async function (req, res, next) {
+    try {
+        const unit = await db.Unit.findOne({
+            where: {
+                id: req.params.id
+            }
+        })
+        res.status(200).json(unit)
+    } catch (error) {
+        next(error)
+    }
 })
 app.post('/api/unit', isAdminMiddleware, async function (req, res, next) {
     try {

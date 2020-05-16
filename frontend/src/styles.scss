@@ -18,5 +18,7 @@ $frontend-theme: mat-light-theme($frontend-primary, $frontend-accent, $frontend-
 // that you are using.
 @include angular-material-theme($frontend-theme);
 @import '~ol/ol.css';
-html, body { height: 100%; }
-body { margin: 0; padding:0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { 
+    height: 100%; 
+    margin: 0; padding:0; font-family: Roboto, "Helvetica Neue", sans-serif; 
+}

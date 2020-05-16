@@ -2,8 +2,8 @@
     position: absolute;
     z-index: 2;
     bottom: 20px;
-    left: 30%;
-    right: 30%;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     justify-content: space-between;
     width: fit-content;

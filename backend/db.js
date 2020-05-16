@@ -21,7 +21,7 @@ Unit.init({
     },
     parent_unit_id: DataTypes.INTEGER,
     geom: {
-        type: DataTypes.GEOMETRY('POLYGON', 4326),
+        type: DataTypes.GEOMETRY('MULTIPOLYGON', 4326),
         allowNull: false
     }
 }, { sequelize });
