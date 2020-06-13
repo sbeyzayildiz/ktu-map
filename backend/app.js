@@ -3,6 +3,8 @@ const app = express()
 const db = require('./db');
 const hasha = require('hasha');
 const jsonwebtoken = require('jsonwebtoken')
+const multer = require('multer')
+const upload = multer()
 
 class HttpError extends Error { }
 const envChecker = () => {
@@ -28,6 +30,7 @@ envChecker();
 
 app.use((req, res, next) => {
     res.set({
+        'Access-Control-Allow-Methods': 'PUT, POST, GET, DELETE',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'content-type, authorization'
     })
@@ -41,7 +44,7 @@ const isAdminMiddleware = async (req, res, next) => {
             throw new HttpError('UnAuthorized')
         }
         console.log('token', token)
-        const obj = jsonwebtoken.verify(token, process.env.JWT_KEY);
+        const obj = jsonwebtoken.verify(token, process.env.JWT_KEY,{ expiresIn: '1m'});
         next();
     } catch (error) {
         return res.status(401).json({});
@@ -62,15 +65,30 @@ app.get('/api/unit/:id', async function (req, res, next) {
         const unit = await db.Unit.findOne({
             where: {
                 id: req.params.id
-            }
+            },
+            include: [{
+                model: db.Photo,
+                attributes: ['id']
+            }]
         })
         res.status(200).json(unit)
     } catch (error) {
         next(error)
     }
 })
+app.get('/api/unit/:id/photos', async function (req, res, next) {
+    try {
+        const photos = await db.Photo.findAll()
+        res.status(200).json(photos)
+    } catch (error) {
+        next(error)
+    }
+})
 app.post('/api/unit', isAdminMiddleware, async function (req, res, next) {
     try {
+        if (req.body.geom) {
+            req.body.geom.crs = { type: 'name', properties: { name: 'EPSG:4326' } }
+        }
         const unit = await db.Unit.create(req.body)
         res.status(201).json(unit);
     } catch (error) {
@@ -78,15 +96,60 @@ app.post('/api/unit', isAdminMiddleware, async function (req, res, next) {
     }
 
 })
-app.put('/api/unit/:id', function (req, res) {
-
+app.put('/api/unit/:id', isAdminMiddleware, async function (req, res, next) {
+    try {
+        if (req.body.geom) {
+            req.body.geom.crs = { type: 'name', properties: { name: 'EPSG:4326' } }
+        }
+        const unit = await db.Unit.findByPk(req.params.id)
+        if (unit === null) {
+            res.status(404).json({ message: 'Birim bulunamadı' })
+            return;
+        }
+        unit.setAttributes(req.body)
+        await unit.save();
+        res.status(201).json(unit)
+    } catch (error) {
+        next(error)
+    }
 })
-app.delete('/api/unit/:id', function (req, res) {
-
+app.put('/api/unit/:id/geom', isAdminMiddleware, async function (req, res, next) {
+    try {
+        if (req.body.geom) {
+            req.body.geom.crs = { type: 'name', properties: { name: 'EPSG:4326' } }
+        }
+        const unit = await db.Unit.findByPk(req.params.id)
+        if (unit === null) {
+            res.status(404).json({ message: 'Birim bulunamadı' })
+            return;
+        }
+        unit.geom = req.body.geom;
+        await unit.save();
+        res.status(201).json(unit)
+    } catch (error) {
+        next(error)
+    }
+})
+app.delete('/api/unit/:id',isAdminMiddleware, async function (req, res, next) {
+    try {
+        const id = req.params.id
+        const unit = await db.Unit.findByPk(id)
+        if (unit === null) {
+            res.status(404).json({ unit: unit, message: 'Birim bulunamadı' })
+            return;
+        }
+        await unit.destroy();
+        // const unit = await db.Unit.destroy({
+        //     where: {id: req.params.id}
+        // })
+        res.status(201).json(unit)
+    } catch (error) {
+        next(error)
+    }
 })
 
 
-app.get('/api/category', async function (req, res) {
+app.get('/api/category', async function (req, res, next) {
     try {
         const cats = await db.Category.findAll();
         res.status(200).json(cats);
@@ -94,22 +157,72 @@ app.get('/api/category', async function (req, res) {
         next(error)
     }
 })
-app.post('/api/category', function (req, res) {
+app.post('/api/category',isAdminMiddleware, async function (req, res, next) {
+    try {
+        const category = await db.Category.create(req.body);
+        if(!category) {
+            throw new Error('Kategori oluşturulamadı.')
+        }
+        res.status(200).json(category);
+    } catch (error) {
+        next(error)
+    }
+})
+app.delete('/api/category/:id', isAdminMiddleware, async function (req, res, next) {
 
 })
-app.delete('/api/category/:id', function (req, res) {
 
+
+app.get('/api/photo/:id', async function (req, res, next) {
+    try {
+        const photo = await db.Photo.findByPk(req.params.id)
+        if (!photo) {
+            throw new Error('photo bulunamadı')
+        }
+        // res.set('content-type', 'image');
+        // photo.data;
+        res.write(photo.data);
+        res.end();
+    } catch (error) {
+        next(error)
+    }
 })
+app.post('/api/photo/:unit_id',isAdminMiddleware, upload.single('photo'), async function (req, res, next) {
+    try {
+        const unitId = req.params.unit_id;
+        const unit = await db.Unit.findByPk(unitId)
+        if (!unit) {
+            throw new Error('Birim bulunamadı')
+        }
+        // console.log(req.file);
+        const photo = await db.Photo.create({
+            unit_id: unit.id,
+            data: req.file.buffer
+        });
 
-
-app.get('/api/photo/:unit_id', function (req, res) {
-
+        // const photo = await db.Photo.create(req.body)
+        res.status(201).json({
+            id: photo.id
+        });
+    } catch (error) {
+        console.log('HATA', error);
+        next(error);
+    }
 })
-app.post('/api/photo/:unit_id', function (req, res) {
-
-})
-app.delete('/api/photo/:id', function (req, res) {
-
+app.delete('/api/photo/:id',isAdminMiddleware,async function (req, res, next) {
+    try {
+        const photoId = req.params.id
+        const photo = await db.Photo.findByPk(photoId)
+        if(!photo) {
+            throw new Error('Fotoğraf bulunamadı')
+        }
+        await photo.destroy();
+        res.status(201).json({
+            message: 'Silme işlemi başarılı'
+        });
+    } catch (error) {
+        next(error)
+    }
 })
 
 

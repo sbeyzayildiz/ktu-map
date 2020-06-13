@@ -1,1 +1,58 @@
-<p>unit-add works!</p>
+<ng-template #modal>
+    <h2 mat-dialog-title>Birim Ekle</h2>
+    <mat-dialog-content>
+        <div class="company-panel">
+            <form [formGroup]="unitAddForm">
+                <div class="left-content">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Birim Adı</mat-label>
+                        <input matInput formControlName="name" type="text" required>
+                        <!-- <mat-hint>Bu alan zorunludur.</mat-hint> -->
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Üst Birim</mat-label>
+                        <mat-select formControlName="parent_id" required>
+                            <mat-option *ngFor="let unit of unitList" [value]="unit.id">{{unit.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Kategori</mat-label>
+                        <mat-select formControlName="category_id" required>
+                            <mat-option *ngFor="let category of categories" [value]="category.id">{{category.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Açıklama</mat-label>
+                        <input matInput formControlName="description" type="text">
+                        <!-- <mat-hint>Bu alan zorunludur.</mat-hint> -->
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Telefon</mat-label>
+                        <input matInput formControlName="telephone" type="text">
+                        <!-- <mat-hint>Bu alan zorunludur.</mat-hint> -->
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Website</mat-label>
+                        <input matInput formControlName="website" type="text">
+                        <!-- <mat-hint>Bu alan zorunludur.</mat-hint> -->
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Adres</mat-label>
+                        <input matInput formControlName="address" type="text">
+                        <!-- <mat-hint>Bu alan zorunludur.</mat-hint> -->
+                    </mat-form-field>
+                </div>
+            </form>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <div class="buttons">
+            <button mat-raised-button color="primary" [disabled]="!unitAddForm.valid" (click)="addUnit()">
+                Kaydet
+            </button>
+            <button mat-raised-button color="accent" (click)="cancelAdd()">
+                İptal
+            </button>
+        </div>
+    </mat-dialog-actions>
+</ng-template>

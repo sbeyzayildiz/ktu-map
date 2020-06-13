@@ -1,0 +1,28 @@
+form {
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
+    .left-content {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+.category-delete {
+    display: none;
+    
+}
+.category-name {
+    display: flex;
+    &:hover {
+        .category-delete {
+            display: block;
+        }
+    }
+}
+

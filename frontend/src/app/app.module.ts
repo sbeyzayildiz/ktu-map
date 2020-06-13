@@ -6,7 +6,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './services/AuthGuard/auth.guard';
 import { RouterModule, Routes } from '@angular/router';
-import { MatSidenavModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatDialogModule, MatDividerModule } from '@angular/material';
+import { MatSidenavModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatDialogModule, MatDividerModule, MatSnackBar, MatSnackBarModule, MAT_SNACK_BAR_DEFAULT_OPTIONS, MAT_SNACK_BAR_DATA, MatSelectModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,11 +23,13 @@ import { UnitAddComponent } from './unit-add/unit-add.component';
 const routes: Routes = [
   {
     path: '', component: HomeComponent, children: [
-      { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], children: [
-        { path: 'add', component: UnitEditComponent},
-        { path: 'edit', component: UnitEditComponent},
-        { path: 'delete', component: UnitDeleteComponent},
-      ]},
+      {
+        path: 'admin', component: AdminComponent, canActivate: [AuthGuard], children: [
+          { path: 'delete', component: UnitDeleteComponent },
+          { path: 'add', component: UnitAddComponent },
+          { path: 'edit', component: UnitEditComponent },
+        ]
+      },
       { path: 'login', component: LoginComponent },
     ]
   }
@@ -60,7 +62,9 @@ const routes: Routes = [
     FormsModule,
     MatDialogModule,
     HttpClientModule,
-    MatDividerModule
+    MatDividerModule,
+    MatSnackBarModule,
+    MatSelectModule
   ],
   providers: [
     AuthGuard,
@@ -68,7 +72,11 @@ const routes: Routes = [
       provide: HTTP_INTERCEPTORS,
       useClass: TokenIntercepterService,
       multi: true
-    }
+    },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: { duration: 2500 }
+    },
   ],
   bootstrap: [AppComponent]
 })

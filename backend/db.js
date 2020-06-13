@@ -6,7 +6,9 @@ const POSTGRES_USER = process.env.POSTGRES_USER
 const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD
 const POSTGRES_DB = process.env.POSTGRES_DB
 
-const sequelize = new Sequelize(`postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}`) // Example for postgres
+const sequelize = new Sequelize(`postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}`, {
+    logging: false
+}) // Example for postgres
 
 
 class Unit extends Model { }
@@ -20,6 +22,7 @@ Unit.init({
         allowNull: false
     },
     parent_unit_id: DataTypes.INTEGER,
+    address: DataTypes.STRING,
     geom: {
         type: DataTypes.GEOMETRY('MULTIPOLYGON', 4326),
         allowNull: false
@@ -28,16 +31,16 @@ Unit.init({
 
 class Photo extends Model { }
 Photo.init({
-    data: DataTypes.STRING,
+    data: DataTypes.BLOB('tiny'),
     unit_id: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
 
 }, { sequelize });
-
+Unit.hasMany(Photo, { foreignKey: 'unit_id'})
 Photo.belongsTo(Unit, {
-    foreignKey: 'unit_id'
+    foreignKey: 'unit_id',
 })
 class Category extends Model { }
 Category.init({

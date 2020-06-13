@@ -17,13 +17,14 @@
                 <mat-icon>input</mat-icon>
             </button>
         </ng-container>
-        <ng-container *ngIf="currentMapState === MapState.DRAW_STARTED">
-            <button mat-raised-button color="accent" title="Onay" (click)="saveDraw()">
+        <ng-container *ngIf="currentMapState === MapState.DRAW_STARTED || currentMapState === MapState.DRAW_EDIT">
+            <button mat-raised-button color="accent" title="Değişiklikler Kaydet" (click)="saveDraw()">
                 <mat-icon>check</mat-icon>
             </button>
-            <button mat-raised-button color="accent" title="İptal" (click)="changeState(MapState.DEFAULT)">
+            <button mat-raised-button color="accent" title="İptal" (click)="cancelEdit()">
                 <mat-icon>close</mat-icon>
             </button>
         </ng-container>
     </mat-card-content>
 </mat-card>
+<router-outlet></router-outlet>

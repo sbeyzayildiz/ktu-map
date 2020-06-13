@@ -1,1 +1,81 @@
-
+<ng-template #modal>
+    <h2 mat-dialog-title>Birim Düzenle</h2>
+    <mat-dialog-content>
+        <div class="company-panel">
+            <form [formGroup]="unitEditForm">
+                <div class="left-content">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Birim Adı</mat-label>
+                        <input matInput formControlName="name" type="text" required>
+                        <!-- <mat-hint>Bu alan zorunludur.</mat-hint> -->
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Üst Birim</mat-label>
+                        <mat-select formControlName="parent_unit_id" required>
+                            <mat-option *ngFor="let unit of unitList" [value]="unit.id">{{unit.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div style="display:flex; justify-content: space-between; align-items: center;">
+                        <mat-form-field appearance="fill" style="flex:1;">
+                            <mat-label>Kategori</mat-label>
+                            <mat-select formControlName="category_id" required>
+                                <mat-option *ngFor="let category of categories" [value]="category.id">
+                                    <span>{{category.name}}</span>
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button mat-mini-fab color="primary" title="Kategori Ekle" (click)="addCategory()"  style="margin:8px 12px 24px 12px;">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Açıklama</mat-label>
+                        <input matInput formControlName="description" type="text">
+                        <!-- <mat-hint>Bu alan zorunludur.</mat-hint> -->
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Telefon</mat-label>
+                        <input matInput formControlName="telephone" type="text">
+                        <!-- <mat-hint>Bu alan zorunludur.</mat-hint> -->
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Website</mat-label>
+                        <input matInput formControlName="website" type="text">
+                        <!-- <mat-hint>Bu alan zorunludur.</mat-hint> -->
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Adres</mat-label>
+                        <input matInput formControlName="address" type="text">
+                        <!-- <mat-hint>Bu alan zorunludur.</mat-hint> -->
+                    </mat-form-field>
+                </div>
+            </form>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <div class="buttons">
+            <button mat-raised-button color="primary" [disabled]="!unitEditForm.valid" (click)="editUnit()">
+                Kaydet
+            </button>
+            <button mat-raised-button color="accent" (click)="cancelAdd()">
+                İptal
+            </button>
+        </div>
+    </mat-dialog-actions>
+</ng-template>
+<ng-template #categoryAdd>
+    <h2>Kategori Ekle</h2>
+    <mat-dialog-content>
+        <mat-form-field>
+            <mat-label>Kategori Adı</mat-label>
+            <input type="text" matInput #categoryName>
+        </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <div class="buttons">
+            <button mat-raised-button color="primary" (click)="saveCompanyName(categoryName)">
+                Kaydet
+            </button>
+        </div>
+    </mat-dialog-actions>
+</ng-template>

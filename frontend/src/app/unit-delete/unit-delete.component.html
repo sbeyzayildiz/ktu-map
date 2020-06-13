@@ -1,1 +1,19 @@
-<p>unit-delete works!</p>
+
+<ng-template #modal>
+    <h2 mat-dialog-title>Birim Sil</h2>
+    <mat-dialog-content *ngIf="unit">
+        <div class="company-panel">
+            {{unit.name}} birimi silmeyi onaylayın.
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <div class="buttons">
+            <button mat-raised-button color="primary" (click)="deleteUnit()">
+                Onay
+            </button>
+            <button mat-raised-button color="accent" (click)="cancelDelete()">
+                İptal
+            </button>
+        </div>
+    </mat-dialog-actions>
+</ng-template>

@@ -1,18 +1,60 @@
+.mat-card-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 .content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 8px;
+    line-height: 2em;
     .title {
         font-size: 18px;
         font-weight: 600;
         color: #777;
+        display: flex;
+        .photo-input {
+            
+            align-items: center;
+            position: relative;
+            width: 20px;
+            input[type='file'] {
+                // opacity: 1;
+                opacity: 0;
+                width: inherit;
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                direction: rtl;
+                background-color: yellow;
+                cursor: pointer;
+                // &:hover {
+                // }
+            }
+        }
     }
     .row {
         display: flex;
         align-items: center;
         span {
             margin-right: 8px;
+            max-width: 400px;
+        }
+    }
+}
+
+.photo-list {
+    display: flex;
+    flex-direction: column;
+
+    img {
+        border: 1px solid #777;
+        margin-bottom: 8px;
+        &:hover {
+            border: 1px solid #ff4081;
         }
     }
 }
