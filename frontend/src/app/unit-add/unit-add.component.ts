@@ -30,7 +30,7 @@ export class UnitAddComponent implements OnInit, OnDestroy {
   ) { 
     this.unitAddForm = formBuilder.group({
       name: new FormControl('', Validators.required),
-      parent_id: new FormControl('', Validators.required),
+      parent_id: new FormControl(0, Validators.required),
       category_id: new FormControl('', Validators.required),
       description:new FormControl(''),
       telephone: new FormControl(''),

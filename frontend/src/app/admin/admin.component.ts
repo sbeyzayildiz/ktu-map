@@ -1,7 +1,7 @@
 import GeoJSON from 'ol/format/GeoJSON';
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HomeComponent } from '../home/home.component';
+import { HomeComponent, MapState } from '../home/home.component';
 import Draw from 'ol/interaction/Draw';
 import GeometryType from 'ol/geom/GeometryType';
 import VectorLayer from 'ol/layer/Vector';
@@ -17,15 +17,15 @@ import { Modify, Select } from 'ol/interaction';
 import { ModifyEvent } from 'ol/interaction/Modify';
 import { singleClick } from 'ol/events/condition';
 import { first } from 'rxjs/operators';
-enum MapState {
-  DRAW_STARTED = 'DRAW_STARTED',
-  DEFAULT = 'DEFAULT',
-  DRAW_ENDED = 'DRAW_ENDED',
-  DRAW_EDIT = 'DRAW_EDIT',
-  DRAW_EDIT_ENDED = 'DRAW_EDIT_ENDED',
-  DELETE = 'DELETE'
+// enum MapState {
+//   DRAW_STARTED = 'DRAW_STARTED',
+//   DEFAULT = 'DEFAULT',
+//   DRAW_ENDED = 'DRAW_ENDED',
+//   DRAW_EDIT = 'DRAW_EDIT',
+//   DRAW_EDIT_ENDED = 'DRAW_EDIT_ENDED',
+//   DELETE = 'DELETE'
 
-}
+// }
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -36,7 +36,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   MapState = MapState;
   unitSelected = false;
   vectorLayer: VectorLayer;
-  currentMapState: MapState = MapState.DEFAULT;
+  // currentMapState: MapState = MapState.DEFAULT;
   modify: Modify;
   editUnitId = 0;
   lastModifiedFetaure;
@@ -120,7 +120,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   changeState(newState: MapState) {
-    const oldState = this.currentMapState;
+    const oldState = this.homeComponent.currentMapState;
     if (newState === oldState) {
       return;
     }
@@ -144,7 +144,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.homeComponent.selectPointerMove.setActive(true);
 
     }
-    this.currentMapState = newState;
+    this.homeComponent.currentMapState = newState;
   }
 
   removeDraw() {
@@ -153,10 +153,10 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.draw = null;
   }
   saveDraw() {
-    if (this.currentMapState === MapState.DRAW_STARTED) {
+    if (this.homeComponent.currentMapState === MapState.DRAW_STARTED) {
       this.getUnitAddComponent();
     }
-    if (this.currentMapState === MapState.DRAW_EDIT) {
+    if (this.homeComponent.currentMapState === MapState.DRAW_EDIT) {
       this.updateUnitGeom();
     }
   }

@@ -1,0 +1,110 @@
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+$ktu-primary: (
+    50 : #e2e7ec,
+    100 : #b7c4d0,
+    200 : #879db1,
+    300 : #567692,
+    400 : #32587a,
+    500 : #0e3b63,
+    600 : #0c355b,
+    700 : #0a2d51,
+    800 : #082647,
+    900 : #041935,
+    A100 : #6d9fff,
+    A200 : #3a7dff,
+    A400 : #075cff,
+    A700 : #0051ec,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #ffffff,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+
+$ktu-secaondary: (
+    50 : #e2e7ec,
+    100 : #b7c4d0,
+    200 : #879db1,
+    300 : #567692,
+    400 : #32587a,
+    500 : #0e3b63,
+    600 : #0c355b,
+    700 : #0a2d51,
+    800 : #082647,
+    900 : #041935,
+    A100 : #6d9fff,
+    A200 : #3a7dff,
+    A400 : #075cff,
+    A700 : #0051ec,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #ffffff,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+//#fabe31
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ktu-primary: mat-palette($ktu-primary);
+$ktu-accent:  mat-palette($ktu-secaondary, 800, 700, 900);
+
+// The warn palette is optional (defau  lts to red).
+$ktu-warn:    mat-palette($mat-pink);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$ktu-theme: mat-light-theme($ktu-primary, $ktu-accent, $ktu-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($ktu-theme);
+
+.snackbar-success {
+  background-color: #00c851;
+  color: #fff;
+
+}
+.snackbar-error {
+  background-color: #ff4444;
+  color: #fff;
+}
+.snackbar-warning {
+  background-color: #ffbb33;
+  color: #fff;
+}
+
+.mat-sort-header-button {
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  color: #000 !important
+}

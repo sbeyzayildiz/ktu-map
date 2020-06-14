@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
 import { AdminComponent } from '../admin/admin.component';
 import { HomeComponent } from '../home/home.component';
@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './unit-delete.component.html',
   styleUrls: ['./unit-delete.component.scss']
 })
-export class UnitDeleteComponent implements OnInit {
+export class UnitDeleteComponent implements OnInit, OnDestroy {
   @ViewChild('modal', { static: true, read: TemplateRef }) modalElementRef: TemplateRef<any>;
   dialogRef: MatDialogRef<any>;
   unit;
@@ -42,9 +42,9 @@ export class UnitDeleteComponent implements OnInit {
 
   getUnit() {
     this.httpClient.get(environment.apiUrl + 'unit/' + this.id).subscribe((response) => {
-      this.unit = response;
-      console.log('unşşşşttt', response);
-      
+      if(response) {
+        this.unit = response;
+      }
     })
   }
 

@@ -30,12 +30,23 @@ interface Unit {
   telephone: string;
   website: string;
 }
+export enum MapState {
+  DRAW_STARTED = 'DRAW_STARTED',
+  DEFAULT = 'DEFAULT',
+  DRAW_ENDED = 'DRAW_ENDED',
+  DRAW_EDIT = 'DRAW_EDIT',
+  DRAW_EDIT_ENDED = 'DRAW_EDIT_ENDED',
+  DELETE = 'DELETE'
+
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  MapState = MapState;
   showFiller = false;
   filteredStates: Observable<Unit[]>;
   sidebarVisibility: boolean;
@@ -59,6 +70,7 @@ export class HomeComponent implements OnInit {
   googleRoad: TileLayer;
   openStreetMap: TileLayer;
   isGoogleVisible: boolean;
+  currentMapState: MapState = MapState.DEFAULT;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -79,8 +91,8 @@ export class HomeComponent implements OnInit {
     this.sidenav.close();
   }
   refreshBasemaps(isGoogleVisible: boolean) {
-    this.googleRoad.setVisible(isGoogleVisible);
-    this.openStreetMap.setVisible(!isGoogleVisible);
+    this.googleRoad.setVisible(!isGoogleVisible);
+    this.openStreetMap.setVisible(isGoogleVisible);
     this.isGoogleVisible = !isGoogleVisible;
   }
   ngOnInit() {
@@ -97,6 +109,7 @@ export class HomeComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(queryParams => {
       if (queryParams.sidebar) {
         this.sidebarVisibility = queryParams.sidebar === 'open';
+        // this.sidebarVisibility ? this.drawer.open() : this.drawer.close();/
       }
       if (queryParams.basemap) {
         console.log('queryParams.basemap', queryParams.basemap);
@@ -132,26 +145,42 @@ export class HomeComponent implements OnInit {
     this.selectPointerMove = selectPointerMove;
 
     this.map.on('singleclick', (e) => {
-      this.unitName = null;
-      this.map.forEachFeatureAtPixel(e.pixel, (f: any) => {
-        this.selectedFeature = f;
-        const unitName = f.get('name');
-        this.unitName = unitName;
-        console.log('UNit id: ', f.get('id'));
+      if (this.currentMapState !== MapState.DEFAULT) {
+        return;
+      }
 
-        this.getViewUnit(f.get('id'));
-        return true;
-      })
+      this.unitName = null;
+      const features = this.map.getFeaturesAtPixel(e.pixel);
+      if (features.length === 0) {
+        this.drawer.close()
+        return;
+      }
+      this.drawer.open()
+      const feature = features[0];
+      if(this.selectedFeature === feature) {
+        return;
+      }
+      this.selectedFeature = feature;
+      const unitName = feature.get('name');
+      this.unitName = unitName;
+      console.log('UNit id: ', feature.get('id'));
+      this.getViewUnit(feature.get('id'));
+
+      // this.map.forEachFeatureAtPixel(e.pixel, (f: any) => {
+      //   return true;
+      // })
     });
   }
 
   changeSidebarVisibility() {
     const newState = this.sidebarVisibility ? 'close' : 'open';
+    this.sidebarVisibility ? this.drawer.close() : this.drawer.open();
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: { sidebar: newState },
       queryParamsHandling: 'merge'
     });
+    this.updateSize();
   }
 
   applyFilter(event: Event) {
@@ -190,21 +219,22 @@ export class HomeComponent implements OnInit {
             color: 'rgba(255, 255, 255, 0.2)'
           }),
           stroke: new Stroke({
-            color: 'red',
+            color: '#6D9FFF',
             width: 2
           }),
           image: new CircleStyle({
             radius: 7,
             fill: new Fill({
-              color: 'red'
+              color: '#6D9FFF'
             })
           }),
           text: new Text({
             text: f.get('name'),
             font: '18px Arial',
             fill: new Fill({
-              color: 'red'
-            })
+              color: '#32587a'
+            }),
+            // overflow: true
 
           })
         })
@@ -214,20 +244,20 @@ export class HomeComponent implements OnInit {
           color: 'rgba(255, 255, 255, 0.2)'
         }),
         stroke: new Stroke({
-          color: 'blue',
+          color: '#075CFF',
           width: 2
         }),
         image: new CircleStyle({
           radius: 7,
           fill: new Fill({
-            color: 'blue'
+            color: '#075CFF'
           })
         }),
         text: new Text({
-          text: f.get('name'),
+          text: f.get('name') || '',
           font: '18px Arial',
           fill: new Fill({
-            color: 'blue'
+            color: '#075CFF'
           })
         })
       })
@@ -243,28 +273,29 @@ export class HomeComponent implements OnInit {
       view: new View({
         zoom: 15,
         maxZoom: 21,
+        center: [4480000, 5000000]
       }),
       controls: []
     });
     this.map = map;
   }
 
-  getUnits() {
+  getUnits(shouldFit = true) {
     this.httpClient.get(environment.apiUrl + 'unit').subscribe((response: Array<Unit>) => {
       this.unitList = response;
       const geoJson = new GeoJSON();
       const features = response.map((data) => {
-        if(data.name === 'null') {
-          return;
-        }
         const multiPolygon = geoJson.readGeometry(data.geom).transform('EPSG:4326', 'EPSG:3857')
         const f = new Feature(multiPolygon);
         f.setId(data.id);
         f.setProperties(data);
-
         return f;
       });
       this.vectorLayer.getSource().addFeatures(features);
+      if(shouldFit) {
+        const extend = this.vectorLayer.getSource().getExtent();
+        this.map.getView().fit(extend);
+      }
     })
   }
 
@@ -283,37 +314,14 @@ export class HomeComponent implements OnInit {
       if (!feature) {
         return;
       }
-
       this.map.getView().fit(feature.getGeometry().getExtent(), {
         duration: 250,
         padding: [40, 40, 40, 40],
         maxZoom: 20,
       })
+      this.updateSize();
     })
   }
-
-  // postUnit() {
-  //   this.httpClient.post(environment.apiUrl + 'unit', {
-  //     name: 'Endüstri Mühendisliği',
-  //     category_id: 3,
-  //     parent_unit_id: 2, //mühendislik fakültesi 
-  //     description: 'Ktü yazılım müh',
-  //     website: 'ktu.edu.tr/ofyazilim',
-  //     geom: {
-  //       type: 'Polygon',
-  //       coordinates: [[
-  //         [40.24604822327501, 40.909869288855646],
-  //         [40.25222803284533, 40.90980442308114],
-  //         [40.25038267304308, 40.91304763385392],
-  //         [40.24604822327501, 40.909869288855646]
-  //       ]],
-  //       crs: { type: 'name', properties: { name: 'EPSG:4326' } }
-  //     }
-  //   }).subscribe((response) => {
-  //     this.getUnits()
-
-  //   })
-  // }
 
   enterSearchGetUnit(event: KeyboardEvent, unitId: number) {
     console.log('keyup: ', event);
@@ -327,6 +335,21 @@ export class HomeComponent implements OnInit {
       },
       queryParamsHandling: 'merge'
     });
+    this.updateSize();
   }
 
+  zoom(level: 1 | -1) {
+    const view = this.map.getView();
+    view.setZoom(view.getZoom() + level);
+  }
+
+
+  updateSize() {
+    setTimeout(() => {
+      setTimeout(() => {
+        this.map.updateSize();
+      }, 300);
+      this.map.updateSize();
+    }, 300);
+  }
 }

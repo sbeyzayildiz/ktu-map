@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, OnDestroy } from '@angular/core';
 import { MatDialogRef, MatDialog, MatSnackBar } from '@angular/material';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -21,7 +21,7 @@ interface Unit {
   templateUrl: './unit-edit.component.html',
   styleUrls: ['./unit-edit.component.scss']
 })
-export class UnitEditComponent implements OnInit {
+export class UnitEditComponent implements OnInit, OnDestroy {
   @ViewChild('modal', { static: true, read: TemplateRef }) modalElementRef: TemplateRef<any>;
   @ViewChild('categoryAdd', { static: true, read: TemplateRef }) categoryElementRef: TemplateRef<any>;
   dialogRef: MatDialogRef<any>;
@@ -29,7 +29,7 @@ export class UnitEditComponent implements OnInit {
   unitList = [];
   categories = [];
   unit: Unit;
-  id:number;
+  id: number;
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -39,7 +39,7 @@ export class UnitEditComponent implements OnInit {
     private dialog: MatDialog,
     formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
-  ) { 
+  ) {
     this.unitEditForm = formBuilder.group({
       id: new FormControl(''),
       createdAt: new FormControl(''),
@@ -47,7 +47,7 @@ export class UnitEditComponent implements OnInit {
       name: new FormControl('', Validators.required),
       parent_unit_id: new FormControl('', Validators.required),
       category_id: new FormControl('', Validators.required),
-      description:new FormControl(''),
+      description: new FormControl(''),
       telephone: new FormControl(''),
       website: new FormControl(''),
       address: new FormControl(''),
@@ -63,10 +63,10 @@ export class UnitEditComponent implements OnInit {
     this.getUnits();
     this.getCategories();
     this.activatedRoute.queryParams.subscribe((params) => {
-      if(params.unit_id) {
+      if (params.unit_id) {
         this.id = parseInt(params.unit_id);
         console.log(params);
-        
+
         this.getUnit();
       } else {
         this.snackbar.open('Birim bulunamadı');
@@ -82,7 +82,7 @@ export class UnitEditComponent implements OnInit {
     this.httpClient.get<Unit>(environment.apiUrl + 'unit/' + this.id).subscribe((response) => {
       this.unit = response;
       this.unitEditForm.setValue(response);
-    },(error) => {
+    }, (error) => {
       this.snackbar.open('Birim bulunamadı!');
       this.destroyMe();
     });
@@ -97,9 +97,12 @@ export class UnitEditComponent implements OnInit {
   editUnit() {
     this.httpClient.put(environment.apiUrl + 'unit/' + this.id, this.unitEditForm.value).subscribe((response) => {
       this.snackbar.open('Birim düzenlendi!');
-      this.homeComponent.getViewUnit(this.unit.id)
+      this.homeComponent.getUnits(false);
+      // this.homeComponent.getViewUnit(this.unit.id);
+      const feature = this.homeComponent.vectorLayer.getSource().getFeatureById(this.id)
+      feature.set('name', this.unitEditForm.controls.name.value)
       this.destroyMe();
-    },(error) => {
+    }, (error) => {
       console.log(this.unitEditForm)
       console.log(error);
       this.snackbar.open('Birim düzenlenirken bir hata oluştu');
@@ -115,7 +118,7 @@ export class UnitEditComponent implements OnInit {
   getCategories() {
     this.httpClient.get(environment.apiUrl + 'category').subscribe((response: Array<any>) => {
       this.categories = response;
-      this.categories.sort((a,b) => a.id-b.id);
+      this.categories.sort((a, b) => a.id - b.id);
     })
   }
 
@@ -133,8 +136,8 @@ export class UnitEditComponent implements OnInit {
 
   saveCompanyName(categoryName) {
     console.log('companyName: ', categoryName.value);
-    
-    if(!categoryName.value) {
+
+    if (!categoryName.value) {
       return;
     }
     const body = {

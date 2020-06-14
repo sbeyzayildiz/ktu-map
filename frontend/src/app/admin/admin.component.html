@@ -1,6 +1,6 @@
 <mat-card class="tool">
     <mat-card-content>
-        <ng-container *ngIf="currentMapState === MapState.DEFAULT">
+        <ng-container *ngIf="homeComponent.currentMapState === MapState.DEFAULT">
             <!-- <button mat-raised-button color="accent" title="Birim Seç" (click)="selectUnit()">
                 <mat-icon>touch_app</mat-icon>
             </button> -->
@@ -17,7 +17,7 @@
                 <mat-icon>input</mat-icon>
             </button>
         </ng-container>
-        <ng-container *ngIf="currentMapState === MapState.DRAW_STARTED || currentMapState === MapState.DRAW_EDIT">
+        <ng-container *ngIf="homeComponent.currentMapState === MapState.DRAW_STARTED || homeComponent.currentMapState === MapState.DRAW_EDIT">
             <button mat-raised-button color="accent" title="Değişiklikler Kaydet" (click)="saveDraw()">
                 <mat-icon>check</mat-icon>
             </button>
