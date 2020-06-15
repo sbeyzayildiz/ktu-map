@@ -3,48 +3,48 @@
         <app-unit></app-unit>
     </mat-drawer>
     <mat-drawer-content>
-            <button class="menu-button" mat-icon-button (click)="changeSidebarVisibility()">
-                <mat-icon color="primary">menu</mat-icon>
-            </button>
-            <mat-form-field appearance="outline" class="filter-input">
-                <mat-label style="display: flex; align-items: center;">
-                    <mat-icon style="font-size: 30px;">
-                        search
-                    </mat-icon>
-                    Birim Ara
-                </mat-label>
-                <input matInput placeholder="Örn. Bilgisayar Mühendisliği" color="accent" [matAutocomplete]="auto" #unit
-                    [formControl]="stateCtrl">
-                <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let unit of filteredStates | async" [value]="unit.name"
-                        (click)="getViewUnit(unit.id)">{{unit.name}}</mat-option>
-                </mat-autocomplete>
-            </mat-form-field>
-            <a class="logo" [routerLink]="['/login']" title="Oturum Aç">
-            </a>
-            <div #map class="map">
+        <button class="menu-button" mat-icon-button (click)="changeSidebarVisibility()">
+            <mat-icon color="primary">menu</mat-icon>
+        </button>
+        <mat-form-field appearance="outline" class="filter-input">
+            <mat-label style="display: flex; align-items: center;">
+                <mat-icon style="font-size: 30px;">
+                    search
+                </mat-icon>
+                <span>Birim Ara</span>
+            </mat-label>
+            <input matInput placeholder="Örn. Bilgisayar Mühendisliği" color="accent" [matAutocomplete]="auto" #unit
+                [formControl]="stateCtrl">
+            <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let unit of filteredStates | async" [value]="unit.name"
+                    (click)="getViewUnit(unit.id)">{{unit.name}}</mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+        <a class="logo" [routerLink]="['/login']" title="Oturum Aç">
+        </a>
+        <div #map class="map">
+        </div>
+        <div class="basemap-options">
+            <div (click)="changeViewMapBase()">
+                <img *ngIf="!isGoogleVisible" src="assets/ktu-gm-uydu.jpeg" alt="" width="60" height="60">
+                <img *ngIf="isGoogleVisible" src="assets/ktu-osm.jpeg" alt="" width="60" height="60">
             </div>
-            <div class="basemap-options">
-                <div (click)="changeViewMapBase()">
-                    <img *ngIf="!isGoogleVisible" src="assets/ktu-gm-uydu.jpeg" alt="" width="60" height="60">
-                    <img *ngIf="isGoogleVisible" src="assets/ktu-osm.jpeg" alt="" width="60" height="60">
-                </div>
 
-            </div>
-            <div class="options">
-                <button mat-raised-button color="accent">
-                    <mat-icon>home</mat-icon>
-                </button>
-                <button mat-raised-button (click)="zoom(1)" color="accent">
-                    <mat-icon>add</mat-icon>
-                </button>
-                <button mat-raised-button (click)="zoom(-1)" color="accent">
-                    <mat-icon>remove</mat-icon>
-                </button>
-            </div>
-            <div class="content-title" *ngIf="unitName !== null">
-                <span>{{unitName}}</span>
-            </div>
-            <router-outlet></router-outlet>
+        </div>
+        <div class="options">
+            <button mat-raised-button color="accent">
+                <mat-icon>home</mat-icon>
+            </button>
+            <button mat-raised-button (click)="zoom(1)" color="accent">
+                <mat-icon>add</mat-icon>
+            </button>
+            <button mat-raised-button (click)="zoom(-1)" color="accent">
+                <mat-icon>remove</mat-icon>
+            </button>
+        </div>
+        <div class="content-title" *ngIf="unitName !== null">
+            <span>{{unitName}}</span>
+        </div>
+        <router-outlet></router-outlet>
     </mat-drawer-content>
 </mat-drawer-container>

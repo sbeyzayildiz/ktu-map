@@ -34,6 +34,7 @@
                 // &:hover {
                 // }
             }
+            
         }
     }
     .row {
@@ -42,6 +43,7 @@
         span {
             margin-right: 8px;
             max-width: 400px;
+            // font-size: 18px;
         }
     }
 }
@@ -53,6 +55,7 @@
     img {
         border: 1px solid #777;
         margin-bottom: 8px;
+        min-width: 430px;
         &:hover {
             border: 1px solid #ff4081;
         }
@@ -64,3 +67,4 @@
     display: flex;
     justify-content: flex-end;
 }
+

@@ -200,7 +200,7 @@ export class HomeComponent implements OnInit {
         }),
         stroke: new Stroke({
           color: 'grey',
-          width: 2
+          width: 5
         }),
         image: new CircleStyle({
           radius: 7,
@@ -219,13 +219,13 @@ export class HomeComponent implements OnInit {
             color: 'rgba(255, 255, 255, 0.2)'
           }),
           stroke: new Stroke({
-            color: '#6D9FFF',
-            width: 2
+            color: '#0c355b',
+            width: 5
           }),
           image: new CircleStyle({
             radius: 7,
             fill: new Fill({
-              color: '#6D9FFF'
+              color: '#0c355b'
             })
           }),
           text: new Text({

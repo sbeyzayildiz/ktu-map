@@ -21,22 +21,27 @@
                 <a [href]="unit.website" target="_top">{{unit.website}}</a>
             </div>
         </div>
+        <hr>
         <div class="content">
             <div class="title">Açıklama</div>
             <div class="row">
                 <span>{{unit.description}}</span>
             </div>
         </div>
+        <hr>
         <div class="content">
             <div class="title">
                 <span>Fotoğraflar</span>
                 <div *ngIf="editMode" class="photo-input">
                     <input type="file" accept="image/*" title="Fotoğraf Yükle" (change)="selectFile($event)">
-                    <mat-icon color="accent">add</mat-icon>
+                    <button mat-icon-button color="accent">
+                        <mat-icon>add</mat-icon>
+                    </button>
                 </div>
             </div>
             <div class="photo-list">
-                <img width="240" *ngFor="let photo of unit.Photos" [src]="environment.apiUrl + 'photo/' + photo.id" alt="" (click)="getViewPhoto(photo.id)">
+                <img width="240" *ngFor="let photo of unit.Photos" [src]="environment.apiUrl + 'photo/' + photo.id"
+                    alt="" (click)="getViewPhoto(photo.id)">
             </div>
         </div>
     </mat-card-content>
@@ -44,7 +49,7 @@
 
 <ng-template #photo>
     <mat-dialog-content>
-        <img width="600" [src]="environment.apiUrl + 'photo/' + viewPhotoId" alt="">
+        <img [src]="environment.apiUrl + 'photo/' + viewPhotoId" alt="">
     </mat-dialog-content>
     <mat-dialog-actions *ngIf="editMode">
         <div class="buttons">
