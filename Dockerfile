@@ -1,8 +1,8 @@
 FROM node:14-slim
 
 USER root
-WORKDIR /home/node/app/backend
 WORKDIR /home/node/app/frontend/dist/frontend
+WORKDIR /home/node/app/backend
 
 ADD --chown=node:node backend/package.json /home/node/app/backend/package.json 
 ADD --chown=node:node backend/yarn.lock /home/node/app/backend/yarn.lock
