@@ -1,12 +1,28 @@
 const { Sequelize, Model, DataTypes } = require('sequelize');
 //const sequelize = new Sequelize('sqlite::memory:');
-const POSTGRES_HOST = process.env.POSTGRES_HOST
-const POSTGRES_PORT = process.env.POSTGRES_PORT
-const POSTGRES_USER = process.env.POSTGRES_USER
-const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD
-const POSTGRES_DB = process.env.POSTGRES_DB
+const POSTGRES_HOST = process.env.POSTGRES_HOST.trim();
+const POSTGRES_PORT = process.env.POSTGRES_PORT.trim();
+const POSTGRES_USER = process.env.POSTGRES_USER.trim();
+const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD.trim();
+const POSTGRES_DB = process.env.POSTGRES_DB.trim();
 
-const sequelize = new Sequelize(`postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}`, {
+
+console.log('POSTGRES_HOST', POSTGRES_HOST)
+console.log('POSTGRES_PORT', POSTGRES_PORT)
+console.log('POSTGRES_USER', POSTGRES_USER)
+console.log('POSTGRES_PASSWORD', POSTGRES_PASSWORD)
+console.log('POSTGRES_DB', POSTGRES_DB)
+// const sequelize = new Sequelize(`postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}`, {
+//     logging: false
+// }) // Example for postgres
+
+const sequelize = new Sequelize({
+    dialect: 'postgres',
+    host: POSTGRES_HOST,
+    password: POSTGRES_PASSWORD,
+    username: POSTGRES_USER,
+    database: POSTGRES_DB,
+    port: Number(POSTGRES_PORT),
     logging: false
 }) // Example for postgres
 

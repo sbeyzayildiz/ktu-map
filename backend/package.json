@@ -6,6 +6,7 @@
   "license": "UNLISENCED",
   "scripts": {
     "start": "nodemon server",
+    "prod": "node server",
     "test": "mocha test"
   },
   "dependencies": {

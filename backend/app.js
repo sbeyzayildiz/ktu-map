@@ -5,6 +5,7 @@ const hasha = require('hasha');
 const jsonwebtoken = require('jsonwebtoken')
 const multer = require('multer')
 const upload = multer()
+const path = require('path');
 
 class HttpError extends Error { }
 const envChecker = () => {
@@ -263,6 +264,8 @@ app.use((err, req, res, next) => {
     }
     next(err, req, res)
 })
+// console.log(path.resolve(__dirname, '..', 'frontend','dist','frontend'));
+app.use('/', express.static(path.resolve(__dirname, '..', 'frontend','dist','frontend')))
 module.exports = app
 /**
  * -----UNIT SERVICE------
