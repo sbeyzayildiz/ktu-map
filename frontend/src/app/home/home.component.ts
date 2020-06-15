@@ -352,4 +352,6 @@ export class HomeComponent implements OnInit {
       this.map.updateSize();
     }, 300);
   }
+
+  resetZoom() {}
 }

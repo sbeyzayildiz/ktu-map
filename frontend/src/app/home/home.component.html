@@ -41,6 +41,9 @@
             <button mat-raised-button (click)="zoom(-1)" color="accent">
                 <mat-icon>remove</mat-icon>
             </button>
+            <button mat-raised-button (click)="resetZoom()" color="accent">
+                <mat-icon>fullscreen</mat-icon>
+            </button>
         </div>
         <div class="content-title" *ngIf="unitName !== null">
             <span>{{unitName}}</span>
