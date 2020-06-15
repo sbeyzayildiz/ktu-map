@@ -338,7 +338,7 @@ export class HomeComponent implements OnInit {
     this.updateSize();
   }
 
-  zoom(level: 1 | -1) {
+  zoom(level: number) {
     const view = this.map.getView();
     view.setZoom(view.getZoom() + level);
   }

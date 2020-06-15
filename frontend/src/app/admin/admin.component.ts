@@ -42,7 +42,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   lastModifiedFetaure;
   selectedFeatureOldGeom;
   constructor(
-    private homeComponent: HomeComponent,
+    public homeComponent: HomeComponent,
     private router: Router,
     private httpClient: HttpClient,
     private activatedRoute: ActivatedRoute,

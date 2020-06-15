@@ -13,6 +13,8 @@ interface Unit {
   description: string;
   telephone: string;
   website: string;
+  address: string;
+  Photos: Array<any>;
 }
 @Component({
   selector: 'app-unit',
