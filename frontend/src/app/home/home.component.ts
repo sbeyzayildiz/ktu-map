@@ -353,5 +353,9 @@ export class HomeComponent implements OnInit {
     }, 300);
   }
 
-  resetZoom() {}
+  resetZoom() {
+    this.map.getView().setZoom(16);
+    this.map.getView().setCenter([4426990, 5011900]);
+    // this.map.getView().setCenter([4426990, 5011900]); ktü merkez
+  }
 }
