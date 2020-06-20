@@ -33,10 +33,10 @@
             <div class="title">
                 <span>Fotoğraflar</span>
                 <div *ngIf="editMode" class="photo-input">
-                    <input type="file" accept="image/*" title="Fotoğraf Yükle" (change)="selectFile($event)">
-                    <button mat-icon-button color="accent">
+                    <input type="file" accept="image/*" (change)="selectFile($event)" title="Fotoğraf Yükle">
+                    <!-- <button mat-icon-button color="accent" title="Fotoğraf Yükle"> -->
                         <mat-icon>add</mat-icon>
-                    </button>
+                    <!-- </button> -->
                 </div>
             </div>
             <div class="photo-list">
