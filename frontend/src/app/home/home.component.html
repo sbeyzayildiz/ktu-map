@@ -32,16 +32,16 @@
 
         </div>
         <div class="options">
-            <button mat-raised-button color="accent">
+            <button mat-raised-button color="accent" (click)="goToHome()" title="Kampüse Git!">
                 <mat-icon>home</mat-icon>
             </button>
-            <button mat-raised-button (click)="zoom(1)" color="accent">
+            <button mat-raised-button (click)="zoom(1)" color="accent" title="Yakınlaştır">
                 <mat-icon>add</mat-icon>
             </button>
-            <button mat-raised-button (click)="zoom(-1)" color="accent">
+            <button mat-raised-button (click)="zoom(-1)" color="accent" title="Uzaklaştır">
                 <mat-icon>remove</mat-icon>
             </button>
-            <button mat-raised-button (click)="resetZoom()" color="accent">
+            <button mat-raised-button (click)="resetZoom()" color="accent" title="Ekranı Ortala!">
                 <mat-icon>fullscreen</mat-icon>
             </button>
         </div>

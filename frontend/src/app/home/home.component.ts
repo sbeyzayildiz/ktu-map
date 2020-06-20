@@ -157,7 +157,7 @@ export class HomeComponent implements OnInit {
       }
       this.drawer.open()
       const feature = features[0];
-      if(this.selectedFeature === feature) {
+      if (this.selectedFeature === feature) {
         return;
       }
       this.selectedFeature = feature;
@@ -271,9 +271,9 @@ export class HomeComponent implements OnInit {
       layers: [this.openStreetMap, this.googleRoad, this.vectorLayer],
       target: this.mapRef.nativeElement,
       view: new View({
-        zoom: 15,
+        zoom: 16,
         maxZoom: 21,
-        center: [4480000, 5000000]
+        center: [4426990, 5011900]
       }),
       controls: []
     });
@@ -292,7 +292,7 @@ export class HomeComponent implements OnInit {
         return f;
       });
       this.vectorLayer.getSource().addFeatures(features);
-      if(shouldFit) {
+      if (shouldFit) {
         const extend = this.vectorLayer.getSource().getExtent();
         this.map.getView().fit(extend);
       }
@@ -354,8 +354,15 @@ export class HomeComponent implements OnInit {
   }
 
   resetZoom() {
+    const extend = this.vectorLayer.getSource().getExtent();
+    this.map.getView().fit(extend, {
+      padding: [60, 60, 60, 60]
+    });
+    // this.map.getView().setCenter([4426990, 5011900]); ktü merkez
+  }
+
+  goToHome() {
     this.map.getView().setZoom(16);
     this.map.getView().setCenter([4426990, 5011900]);
-    // this.map.getView().setCenter([4426990, 5011900]); ktü merkez
   }
 }
