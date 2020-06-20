@@ -97,7 +97,7 @@ export class HomeComponent implements OnInit {
   }
   ngOnInit() {
     this.googleRoad = new TileLayer({
-      source: new TileImage({ url: 'http://mt{1-3}.google.com/vt/lyrs=s@13&hl=tr&&x={x}&y={y}&z={z}' }),
+      source: new TileImage({ url: 'https://mt{1-3}.google.com/vt/lyrs=s@13&hl=tr&&x={x}&y={y}&z={z}' }),
       visible: false,
     });
     this.openStreetMap = new TileLayer({
