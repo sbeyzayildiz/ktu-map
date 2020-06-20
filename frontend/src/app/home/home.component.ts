@@ -128,7 +128,7 @@ export class HomeComponent implements OnInit {
         color: '#3399CC',
         width: 5
       })
-
+      
     })
     const selectPointerMove = new Select({
       condition: pointerMove,
@@ -170,6 +170,8 @@ export class HomeComponent implements OnInit {
       //   return true;
       // })
     });
+    this.resetZoom();
+
   }
 
   changeSidebarVisibility() {

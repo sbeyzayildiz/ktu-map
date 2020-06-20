@@ -166,8 +166,8 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   logout() {
     window.localStorage.removeItem('token');
-    this.router.navigate(['..']);
-    window.location.reload();
+    this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+    // window.location.reload();
   }
 
   getUnitAddComponent() {

@@ -40,9 +40,9 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    console.log('THIS', this)
+    // console.log('THIS', this)
     this.httpClient.post(environment.apiUrl + 'login', this.loginForm.value).subscribe((response: any) => {
-      console.log('login response', response);
+      // console.log('login response', response);
       window.localStorage.setItem('token', response.token);
       this.router.navigate(['/admin'], {relativeTo: this.activatedRoute})
       this.dialogRef.close();
