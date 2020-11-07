@@ -14,6 +14,7 @@ services:
             - ADMIN_USERNAME=${ADMIN_USERNAME}
             - ADMIN_PASSWORD=${ADMIN_PASSWORD}
             - JWT_KEY=${JWT_KEY}
+        restart: always
 
     postgresdb:
         image: mdillon/postgis:11-alpine
@@ -21,4 +22,4 @@ services:
             - POSTGRES_DB=${POSTGRES_DB}
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-            
+        restart: always
