@@ -265,9 +265,6 @@ app.use((err, req, res, next) => {
 })
 // console.log(path.resolve(__dirname, '..', 'frontend','dist','frontend'));
 app.use(express.static(path.resolve(__dirname, '..', 'frontend','dist','frontend')))
-app.use((req, res, next) => {
-    res.render(path.resolve(__dirname, '..', 'frontend','dist','frontend', 'index.html'))
-})
 module.exports = app
 /**
  * -----UNIT SERVICE------
