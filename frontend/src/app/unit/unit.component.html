@@ -1,61 +1,63 @@
-<mat-card *ngIf="unit">
-    <mat-card-title>
-        <span>{{unit.name}}</span>
-        <button mat-icon-button color="accent" *ngIf="editMode" (click)="editUnit()" title="Bilgileri Düzenle">
-            <mat-icon>edit</mat-icon>
-        </button>
-    </mat-card-title>
-    <mat-card-content>
-        <div class="content">
-            <div class="title">İletişim Bilgileri</div>
-            <div class="row">
-                <mat-icon>phone</mat-icon>
-                <span>{{unit.telephone}}</span>
-            </div>
-            <div class="row">
-                <mat-icon>home</mat-icon>
-                <span>{{unit.address}}</span>
-            </div>
-            <div class="row">
-                <mat-icon>web</mat-icon>
-                <a [href]="unit.website" target="_top">{{unit.website}}</a>
-            </div>
-        </div>
-        <hr>
-        <div class="content">
-            <div class="title">Açıklama</div>
-            <div class="row">
-                <span>{{unit.description}}</span>
-            </div>
-        </div>
-        <hr>
-        <div class="content">
-            <div class="title">
-                <span>Fotoğraflar</span>
-                <div *ngIf="editMode" class="photo-input">
-                    <input type="file" accept="image/*" (change)="selectFile($event)" title="Fotoğraf Yükle">
-                    <!-- <button mat-icon-button color="accent" title="Fotoğraf Yükle"> -->
-                        <mat-icon>add</mat-icon>
-                    <!-- </button> -->
+<div class="container">
+    <mat-card *ngIf="unit">
+        <mat-card-title>
+            <span>{{unit.name}}</span>
+            <button mat-icon-button color="accent" *ngIf="editMode" (click)="editUnit()" title="Bilgileri Düzenle">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </mat-card-title>
+        <mat-card-content>
+            <div class="content">
+                <div class="title">İletişim Bilgileri</div>
+                <div class="row">
+                    <mat-icon>phone</mat-icon>
+                    <span>{{unit.telephone}}</span>
+                </div>
+                <div class="row">
+                    <mat-icon>home</mat-icon>
+                    <span>{{unit.address}}</span>
+                </div>
+                <div class="row">
+                    <mat-icon>web</mat-icon>
+                    <a [href]="unit.website" target="_top">{{unit.website}}</a>
                 </div>
             </div>
-            <div class="photo-list">
-                <img width="240" *ngFor="let photo of unit.Photos" [src]="environment.apiUrl + 'photo/' + photo.id"
-                    alt="" (click)="getViewPhoto(photo.id)">
+            <hr>
+            <div class="content">
+                <div class="title">Açıklama</div>
+                <div class="row">
+                    <span>{{unit.description}}</span>
+                </div>
             </div>
-        </div>
-    </mat-card-content>
-</mat-card>
-
-<ng-template #photo>
-    <mat-dialog-content>
-        <img [src]="environment.apiUrl + 'photo/' + viewPhotoId" alt="">
-    </mat-dialog-content>
-    <mat-dialog-actions *ngIf="editMode">
-        <div class="buttons">
-            <button mat-raised-button color="primary" (click)="deletePhoto(viewPhotoId)">
-                Sil
-            </button>
-        </div>
-    </mat-dialog-actions>
-</ng-template>
+            <hr>
+            <div class="content">
+                <div class="title">
+                    <span>Fotoğraflar</span>
+                    <div *ngIf="editMode" class="photo-input">
+                        <input type="file" accept="image/*" (change)="selectFile($event)" title="Fotoğraf Yükle">
+                        <!-- <button mat-icon-button color="accent" title="Fotoğraf Yükle"> -->
+                            <mat-icon>add</mat-icon>
+                        <!-- </button> -->
+                    </div>
+                </div>
+                <div class="photo-list">
+                    <img width="240" *ngFor="let photo of unit.Photos" [src]="environment.apiUrl + 'photo/' + photo.id"
+                        alt="" (click)="getViewPhoto(photo.id)">
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    
+    <ng-template #photo>
+        <mat-dialog-content>
+            <img [src]="environment.apiUrl + 'photo/' + viewPhotoId" alt="">
+        </mat-dialog-content>
+        <mat-dialog-actions *ngIf="editMode">
+            <div class="buttons">
+                <button mat-raised-button color="primary" (click)="deletePhoto(viewPhotoId)">
+                    Sil
+                </button>
+            </div>
+        </mat-dialog-actions>
+    </ng-template>
+</div>

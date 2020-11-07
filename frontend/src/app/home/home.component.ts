@@ -170,7 +170,7 @@ export class HomeComponent implements OnInit {
       //   return true;
       // })
     });
-    this.resetZoom();
+    // this.resetZoom();
 
   }
 
