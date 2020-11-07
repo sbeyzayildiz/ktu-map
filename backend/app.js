@@ -44,7 +44,6 @@ const isAdminMiddleware = async (req, res, next) => {
         if (!token) {
             throw new HttpError('UnAuthorized')
         }
-        console.log('token', token)
         const obj = jsonwebtoken.verify(token, process.env.JWT_KEY,{ expiresIn: '1m'});
         next();
     } catch (error) {
