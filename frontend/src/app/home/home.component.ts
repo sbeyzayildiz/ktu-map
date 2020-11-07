@@ -78,7 +78,6 @@ export class HomeComponent implements OnInit {
   ) {
     this.filteredStates = this.stateCtrl.valueChanges
       .pipe(
-        // startWith(''),
         map(unit => unit ? this._filterStates(unit) : this.unitList.slice())
       );
   }
@@ -119,59 +118,10 @@ export class HomeComponent implements OnInit {
     });
     this.initMap();
     this.getUnits();
-    // this.postUnit();
-    const highlightStyle = new Style({
-      fill: new Fill({
-        color: 'rgba(255,255,255,0.7)'
-      }),
-      stroke: new Stroke({
-        color: '#3399CC',
-        width: 5
-      })
-      
-    })
-    const selectPointerMove = new Select({
-      condition: pointerMove,
-      style: highlightStyle,
-    })
-    selectPointerMove.on('select', (e: SelectEvent) => {
-      if (e.selected.length > 0) {
-        this.unitName = e.selected[0].get('name')
-      } else {
-        this.unitName = null
-      }
-    })
-    this.map.addInteraction(selectPointerMove);
-    this.selectPointerMove = selectPointerMove;
-
-    this.map.on('singleclick', (e) => {
-      if (this.currentMapState !== MapState.DEFAULT) {
-        return;
-      }
-
-      this.unitName = null;
-      const features = this.map.getFeaturesAtPixel(e.pixel);
-      if (features.length === 0) {
-        this.drawer.close()
-        return;
-      }
-      this.drawer.open()
-      const feature = features[0];
-      if (this.selectedFeature === feature) {
-        return;
-      }
-      this.selectedFeature = feature;
-      const unitName = feature.get('name');
-      this.unitName = unitName;
-      console.log('UNit id: ', feature.get('id'));
-      this.getViewUnit(feature.get('id'));
-
-      // this.map.forEachFeatureAtPixel(e.pixel, (f: any) => {
-      //   return true;
-      // })
-    });
-    // this.resetZoom();
-
+    // this.drawer.openedChange.subscribe(() => {
+    //   console.log('openedChange');
+    //   this.map.updateSize();
+    // })
   }
 
   changeSidebarVisibility() {
@@ -280,6 +230,7 @@ export class HomeComponent implements OnInit {
       controls: []
     });
     this.map = map;
+    (window as any).map = map;
   }
 
   getUnits(shouldFit = true) {
@@ -293,6 +244,7 @@ export class HomeComponent implements OnInit {
         f.setProperties(data);
         return f;
       });
+      this.vectorLayer.getSource().clear();
       this.vectorLayer.getSource().addFeatures(features);
       if (shouldFit) {
         const extend = this.vectorLayer.getSource().getExtent();
@@ -303,14 +255,7 @@ export class HomeComponent implements OnInit {
 
   getViewUnit(id: number) {
     this.httpClient.get(environment.apiUrl + 'unit/' + id).subscribe((response: Unit) => {
-      this.router.navigate([], {
-        relativeTo: this.activatedRoute,
-        queryParams: {
-          'unit_id': id,
-          'sidebar': 'open'
-        },
-        queryParamsHandling: 'merge'
-      });
+
       this.selectedUnit = response;
       const feature = this.vectorLayer.getSource().getFeatureById(id)
       if (!feature) {
@@ -360,11 +305,55 @@ export class HomeComponent implements OnInit {
     this.map.getView().fit(extend, {
       padding: [60, 60, 60, 60]
     });
-    // this.map.getView().setCenter([4426990, 5011900]); ktü merkez
   }
 
   goToHome() {
     this.map.getView().setZoom(16);
     this.map.getView().setCenter([4426990, 5011900]);
+  }
+  featureHighlight(feature?: Feature) {
+    if (feature) {
+      this.unitName = feature.get('name');
+
+    } else {
+      this.unitName = null;
+    }
+  }
+  updateUnitIdOnUrl = (id?: number) => {
+    if (id === null) {
+      this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: {
+          'unit_id': null,
+        },
+        queryParamsHandling: 'merge'
+      });
+      return;
+    }
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+        'unit_id': id,
+      },
+      queryParamsHandling: 'merge'
+    });
+  }
+  featureSelect(feature?: Feature) {
+    if (!feature) {
+      this.drawer.close();
+      this.updateSize();
+      this.updateUnitIdOnUrl(null);
+      return
+    }
+    this.drawer.open()
+    if (this.selectedFeature === feature) {
+      return;
+    }
+    this.selectedFeature = feature;
+    const unitName = feature.get('name');
+    this.unitName = unitName;
+    const id = feature.get('id');
+    this.updateUnitIdOnUrl(id);
+    this.getViewUnit(id);
   }
 }

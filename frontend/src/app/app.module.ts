@@ -19,6 +19,8 @@ import { UnitEditComponent } from './unit-edit/unit-edit.component';
 import { UnitDeleteComponent } from './unit-delete/unit-delete.component';
 import { TokenIntercepterService } from './services/TokenInterceptor/token-interceptor.service';
 import { UnitAddComponent } from './unit-add/unit-add.component';
+import { EditGeometryComponent } from './admin-components/edit-geometry/edit-geometry.component';
+import { DefaultSelectComponent } from './admin-components/default-select/default-select.component';
 
 const routes: Routes = [
   {
@@ -45,7 +47,9 @@ const routes: Routes = [
     AdminComponent,
     UnitEditComponent,
     UnitDeleteComponent,
-    UnitAddComponent
+    UnitAddComponent,
+    EditGeometryComponent,
+    DefaultSelectComponent
   ],
   imports: [
     BrowserModule,

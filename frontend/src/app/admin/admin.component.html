@@ -28,3 +28,6 @@
     </mat-card-content>
 </mat-card>
 <router-outlet></router-outlet>
+<app-edit-geometry *ngIf="homeComponent.currentMapState === MapState.DRAW_EDIT"
+(modifyEnd)="editGeometryEnd($event)"
+></app-edit-geometry>

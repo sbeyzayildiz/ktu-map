@@ -58,38 +58,6 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   editUnit() {
     this.snackbar.open('Birim seçin!')
-    let selectedFeature: Feature<MultiPolygon> = null;
-    let selectedFeatureOldGeom: MultiPolygon;
-    this.homeComponent.selectPointerMove.setActive(false);
-    const select = new Select({
-      condition: singleClick
-    });
-    this.homeComponent.map.addInteraction(select);
-    const modify = new Modify({
-      features: select.getFeatures(),
-    });
-
-    select.on('select', e => {
-      if (e.selected.length !== 1) {
-        console.log('OLMADI')
-        return;
-      }
-      selectedFeature = e.selected[0] as any;
-      selectedFeatureOldGeom = selectedFeature.getGeometry().clone();
-      this.selectedFeatureOldGeom = selectedFeature.getGeometry().clone();
-      select.setActive(false);
-    })
-    this.homeComponent.map.addInteraction(modify);
-
-    modify.on('modifyend', (event: ModifyEvent) => {
-      this.lastModifiedFetaure = selectedFeature;
-    })
-    modify.on('modifystart', (event: ModifyEvent) => {
-      if (select.getFeatures().getArray()[0].get('id')) {
-
-      }
-    })
-    this.modify = modify;
     this.changeState(MapState.DRAW_EDIT)
   }
 
@@ -140,8 +108,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     }
 
     if (oldState === MapState.DRAW_EDIT) {
-      this.modify.setActive(false);
-      this.homeComponent.selectPointerMove.setActive(true);
+      // this.modify.setActive(false);
+      // this.homeComponent.selectPointerMove.setActive(true);
 
     }
     this.homeComponent.currentMapState = newState;
@@ -185,7 +153,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   updateUnitGeom() {
-    console.log('Updated Features: ', this.lastModifiedFetaure)
+
     const geometry = this.lastModifiedFetaure.getGeometry().clone().transform('EPSG:3857', 'EPSG:4326')
     const body = {
       geom: JSON.parse(new GeoJSON().writeGeometry(geometry))
@@ -194,6 +162,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.httpClient.put(environment.apiUrl + 'unit/' + unit_id + '/geom', body).subscribe((response) => {
       this.snackbar.open('Güncelleme Başarılı');
       this.changeState(MapState.DEFAULT);
+      this.homeComponent.getUnits(false);
     }, (error) => {
       console.log(error);
 
@@ -203,10 +172,10 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   }
 
+  editGeometryEnd(feature?: Feature) { 
+    this.lastModifiedFetaure = feature;
+  }
   cancelEdit() {
-    if(this.lastModifiedFetaure) {
-      this.lastModifiedFetaure.setGeometry(this.selectedFeatureOldGeom);
-    }
     this.changeState(MapState.DEFAULT)
   }
 

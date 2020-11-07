@@ -51,3 +51,7 @@
         <router-outlet></router-outlet>
     </mat-drawer-content>
 </mat-drawer-container>
+<app-default-select 
+(featureHighlight)="featureHighlight($event)"
+(featureSelect)="featureSelect($event)"
+*ngIf="currentMapState === MapState.DEFAULT"></app-default-select>
