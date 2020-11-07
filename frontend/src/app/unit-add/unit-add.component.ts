@@ -63,7 +63,7 @@ export class UnitAddComponent implements OnInit, OnDestroy {
   addUnit() {
     this.httpClient.post(environment.apiUrl + 'unit', this.unitAddForm.value).subscribe((response) => {
       this.snackbar.open('Birim eklendi!');
-      this.homeComponent.getUnits();
+      this.homeComponent.getUnits(false);
       this.destroyMe();
     },(error) => {
       console.log(this.unitAddForm)
